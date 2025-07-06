@@ -144,12 +144,12 @@ struct LargeWidgetView: View {
     let hasStroke: Bool
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 12)
+        RoundedRectangle(cornerRadius: 20)
             .fill(Color.gray.opacity(0.1))
             .stroke(hasStroke ? Color(red: 240/255, green: 152/255, blue: 177/255) : Color.clear, lineWidth: 3)
             .overlay(
-                    Text("Tell them you care")
-                        .font(.system(size: 24, weight: .semibold, design: .rounded))
+                    Text("Tell them you care.")
+                        .font(.system(size: 28, weight: .semibold, design: .rounded))
                         .foregroundColor(.gray)
             )
     }
@@ -157,7 +157,7 @@ struct LargeWidgetView: View {
 
 struct AppIconView: View {
     var body: some View {
-        RoundedRectangle(cornerRadius: 14)
+        RoundedRectangle(cornerRadius: 20)
             .fill(Color.gray.opacity(0.3))
             .frame(width: 65, height: 65)
     }
