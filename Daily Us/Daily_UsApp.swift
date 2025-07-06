@@ -6,27 +6,24 @@
 //
 
 import SwiftUI
-import SwiftData
 
 @main
 struct Daily_UsApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
+    @StateObject private var splashViewModel = SplashViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ZStack {
+                if splashViewModel.isShowingSplash {
+                    SplashView()
+                        .environmentObject(splashViewModel)
+                        .transition(.opacity)
+                } else {
+                    MainView()
+                        .transition(.opacity)
+                }
+            }
+            .animation(.easeInOut(duration: 0.5), value: splashViewModel.isShowingSplash)
         }
-        .modelContainer(sharedModelContainer)
     }
 }
