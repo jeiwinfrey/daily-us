@@ -90,7 +90,7 @@ struct DeviceIllustrationView: View {
             VStack {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(Color.gray.opacity(0.3))
-                    .frame(width: 120, height: 30)
+                    .frame(width: 120, height: 35)
                     .padding(.top, 20)
                 
                 Spacer()
@@ -143,15 +143,53 @@ struct DeviceIllustrationView: View {
 struct LargeWidgetView: View {
     let hasStroke: Bool
     
+    @State private var currentQuoteIndex = 0
+    @State private var opacity: Double = 1.0
+    
+    private let quotes = [
+        "Your friends \nare waiting.",
+        "Start sharing inspiration.",
+        "Join thousands of users.",
+        "Make someone's day.",
+        "Connect through quotes.",
+        "Be the friend \nwho cares.",
+        "Spread joy daily.",
+        "Your words matter."
+    ]
+    
     var body: some View {
         RoundedRectangle(cornerRadius: 20)
             .fill(Color.gray.opacity(0.1))
             .stroke(hasStroke ? Color(red: 240/255, green: 152/255, blue: 177/255) : Color.clear, lineWidth: 3)
             .overlay(
-                    Text("Tell them you care.")
-                        .font(.system(size: 28, weight: .semibold, design: .rounded))
-                        .foregroundColor(.gray)
+                Text(quotes[currentQuoteIndex])
+                    .font(.system(size: 28, weight: .semibold, design: .rounded))
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.center)
+                    .opacity(opacity)
+                    .animation(.easeInOut(duration: 0.3), value: opacity)
             )
+            .onAppear {
+                startFadeAnimation()
+            }
+    }
+    
+    private func startFadeAnimation() {
+        Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
+            // Fade out
+            withAnimation(.easeInOut(duration: 0.3)) {
+                opacity = 0.0
+            }
+            
+            // Change quote and fade in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                currentQuoteIndex = (currentQuoteIndex + 1) % quotes.count
+                
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    opacity = 1.0
+                }
+            }
+        }
     }
 }
 
