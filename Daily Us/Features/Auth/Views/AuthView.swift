@@ -3,9 +3,12 @@ import SwiftUI
 struct AuthView: View {
     @State private var isPressed = false
     @State private var isSignInPressed = false
+    @State private var showSignIn = false
+    @State private var showSignUp = false
     
     var body: some View {
-        GeometryReader { geometry in
+        NavigationStack {
+            GeometryReader { geometry in
             VStack(spacing: 24) {
 
                 // Device illustration placeholder
@@ -40,7 +43,7 @@ struct AuthView: View {
                 // Action buttons
                 VStack(spacing: 16) {
                     // Primary button
-                    Text("Create an account")
+                    Text("Get Started for Free")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                         .padding(.horizontal, 16)
@@ -50,7 +53,7 @@ struct AuthView: View {
                         .scaleEffect(isPressed ? 0.85 : 1.0)
                         .animation(.easeInOut(duration: 0.1), value: isPressed)
                         .onTapGesture {
-                            // Create account action
+                            showSignUp = true
                         }
                         .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
                             isPressed = pressing
@@ -64,7 +67,7 @@ struct AuthView: View {
                         .scaleEffect(isSignInPressed ? 0.85 : 1.0)
                         .animation(.easeInOut(duration: 0.1), value: isSignInPressed)
                         .onTapGesture {
-                            // Sign in action
+                            showSignIn = true
                         }
                         .onLongPressGesture(minimumDuration: 0, maximumDistance: .infinity, pressing: { pressing in
                             isSignInPressed = pressing
@@ -74,6 +77,15 @@ struct AuthView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.white)
+            .navigationBarBackButtonHidden(true)
+            .toolbar(.hidden)
+            .navigationDestination(isPresented: $showSignIn) {
+                SignInView()
+            }
+            .navigationDestination(isPresented: $showSignUp) {
+                SignUpView()
+            }
+            }
         }
     }
 }
